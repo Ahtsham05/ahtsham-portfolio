@@ -13,7 +13,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ahtshamlabs.pro",
   locale: "en_US",
 
-  email: "ahtsham@ahtshamlabs.pro",
+  email: "hello@ahtshamlabs.pro",
   // TODO: replace the LinkedIn and Upwork URLs with your real profiles
   socials: {
     linkedin: "https://www.linkedin.com/in/ahtsham-younas",
