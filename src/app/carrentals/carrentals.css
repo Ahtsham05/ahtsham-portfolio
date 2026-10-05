@@ -1,0 +1,102 @@
+/*
+ * Car-rental landing page styles. Everything is prefixed `cr-` so nothing
+ * here can leak into the main portfolio.
+ */
+
+/* Warmer white + metallic accents for the automotive identity */
+.cr-scope {
+  --color-fg: #f2f0ea;
+  color: var(--color-fg);
+  --color-silver: #c9cdd1;
+  --color-steel: #7d848a;
+}
+
+.text-silver {
+  background: linear-gradient(180deg, #ffffff 0%, #c9cdd1 45%, #7d848a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Wheels */
+.cr-wheel-spin {
+  transform-box: view-box;
+  animation: cr-spin 0.9s linear infinite;
+}
+.cr-spokes {
+  transform-box: view-box;
+  transform: rotate(var(--wheel-rot, 0deg));
+}
+@keyframes cr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Moving specular band on the bodywork (driven by --sheen in px) */
+.cr-sheen {
+  transform: translateX(calc(var(--sheen, 380) * 1px));
+  transition: transform 1.2s var(--ease-out-expo);
+}
+
+/* Headlights react to --beam (0–1) */
+.cr-beam {
+  transform-box: view-box;
+  opacity: calc(0.55 + var(--beam, 0.5) * 0.45);
+  transform: rotate(calc(var(--beam-tilt, 0) * 1deg));
+  transition: opacity 0.8s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+}
+.cr-glow {
+  opacity: calc(0.6 + var(--beam, 0.5) * 0.4);
+  transition: opacity 0.6s var(--ease-out-expo);
+}
+
+/* Outline draw-on (loader, CTA) */
+.cr-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cr-draw 1.3s cubic-bezier(.65, 0, .35, 1) var(--draw-delay, 0s) forwards;
+}
+@keyframes cr-draw {
+  to { stroke-dashoffset: 0; }
+}
+.cr-light-on {
+  opacity: 0;
+  animation: cr-light-on 0.9s ease-out calc(var(--draw-delay, 0s) + 1.15s) forwards;
+}
+@keyframes cr-light-on {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  45% { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+
+/* Native date inputs on dark surfaces */
+.cr-date::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+  opacity: 0.55;
+  cursor: pointer;
+}
+.cr-date { color-scheme: dark; }
+
+/* Hide scrollbars on snap carousels (still scrollable) */
+.cr-snap {
+  scrollbar-width: none;
+}
+.cr-snap::-webkit-scrollbar { display: none; }
+
+/* Road speed lines */
+.cr-road {
+  background-image: repeating-linear-gradient(90deg, rgb(236 238 233 / 0.22) 0 48px, transparent 48px 120px);
+  animation: cr-road 0.9s linear infinite;
+}
+@keyframes cr-road {
+  to { background-position: -120px 0; }
+}
+
+/* Loader pre-paint state: skip on repeat visits within a session */
+html[data-cr-loaded="1"] #cr-loader { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cr-wheel-spin, .cr-road { animation: none; }
+  .cr-draw { stroke-dashoffset: 0; animation: none; }
+  .cr-light-on { opacity: 1; animation: none; }
+}

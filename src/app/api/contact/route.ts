@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { clean, escape, isEmail, sendEnquiry } from "@/lib/mail";
 
 /**
  * Contact endpoint.
@@ -16,10 +17,6 @@ type Payload = {
   budget?: string;
   website?: string; // honeypot
 };
-
-const clean = (v: unknown, max = 2000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
-const escape = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 export async function POST(req: Request) {
   let body: Payload;
@@ -39,14 +36,8 @@ export async function POST(req: Request) {
   const projectType = clean(body.projectType, 60);
   const budget = clean(body.budget, 60);
 
-  if (!name || !/^\S+@\S+\.\S+$/.test(email) || message.length < 10) {
+  if (!name || !isEmail(email) || message.length < 10) {
     return NextResponse.json({ error: "Please complete the required fields." }, { status: 422 });
-  }
-
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  if (!apiKey || !to) {
-    return NextResponse.json({ error: "Email delivery is not configured." }, { status: 503 });
   }
 
   const html = `
@@ -60,19 +51,11 @@ export async function POST(req: Request) {
     <p>${escape(message).replace(/\n/g, "<br/>")}</p>
   `;
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>",
-      to: [to],
-      reply_to: email,
-      subject: `New enquiry — ${projectType || "Project"} — ${name}`,
-      html,
-    }),
-  });
-
-  if (!res.ok) {
+  const result = await sendEnquiry({ subject: `New enquiry — ${projectType || "Project"} — ${name}`, html, replyTo: email });
+  if (result === "unconfigured") {
+    return NextResponse.json({ error: "Email delivery is not configured." }, { status: 503 });
+  }
+  if (result === "failed") {
     return NextResponse.json({ error: "Failed to send. Please try email instead." }, { status: 502 });
   }
   return NextResponse.json({ ok: true });
