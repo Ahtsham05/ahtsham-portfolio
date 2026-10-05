@@ -14,11 +14,10 @@ export const site = {
   locale: "en_US",
 
   email: "hello@ahtshamlabs.pro",
-  // TODO: replace the LinkedIn and Upwork URLs with your real profiles
   socials: {
-    linkedin: "https://www.linkedin.com/in/ahtsham-younas",
+    linkedin: "https://www.linkedin.com/in/saas-developer-ahtsham-ali",
     github: "https://github.com/Ahtsham05",
-    upwork: "https://www.upwork.com/freelancers/ahtshamyounas",
+    upwork: "https://www.upwork.com/freelancers/developerahtsham",
   },
 
   /** Hero credibility stats — keep these honest. */
