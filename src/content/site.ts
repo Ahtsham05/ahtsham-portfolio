@@ -10,14 +10,14 @@ export const site = {
   title: "Ahtsham Younas — Full-Stack SaaS Developer & AI Automation Specialist",
   description:
     "I build scalable SaaS products, high-performance websites, and AI-powered business automations for startups and growing businesses.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ahtshamyounas.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ahtshamlabs.pro",
   locale: "en_US",
 
-  // TODO: replace with your real details
-  email: "hello@ahtshamyounas.com",
+  email: "ahtsham@ahtshamlabs.pro",
+  // TODO: replace the LinkedIn and Upwork URLs with your real profiles
   socials: {
     linkedin: "https://www.linkedin.com/in/ahtsham-younas",
-    github: "https://github.com/ahtshamyounas",
+    github: "https://github.com/Ahtsham05",
     upwork: "https://www.upwork.com/freelancers/ahtshamyounas",
   },
 
